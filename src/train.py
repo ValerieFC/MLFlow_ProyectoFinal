@@ -142,7 +142,7 @@ def main():
         )
         
         # Log artifacts
-        mlflow.log_artifact('src/config.yml')
+        mlflow.log_artifact('config.yml')
         
         print(f"✅ Modelo entrenado y registrado!")
         print(f"📊 Accuracy: {accuracy:.4f}")
