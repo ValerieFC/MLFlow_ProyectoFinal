@@ -11,10 +11,10 @@ import os
 
 
 def load_config():
-    """Cargar configuración desde YAML"""
-    with open("src/config.yml", "r") as file:
+    """Cargar configuración desde archivo YAML"""
+    with open("config.yml", "r") as file:
         return yaml.safe_load(file)
-
+    
 def load_data(file_path):
     """Cargar y limpiar datos"""
     df = pd.read_csv(file_path, delimiter=';')
