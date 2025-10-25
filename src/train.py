@@ -35,10 +35,20 @@ def load_data(file_path):
     return df
 
 def preprocess_data(df, target_col='quality_binary'):
-    """Preprocesamiento de datos"""
-    # Separar características y target
-    X = df.drop(['quality', target_col], axis=1)
+    """Preprocesar datos"""
+    # Crear columna binaria si no existe
+    if target_col not in df.columns and target_col == 'quality_binary':
+        df[target_col] = (df['quality'] >= 6).astype(int)
+    
+    # Preparar características y objetivo
     y = df[target_col]
+    
+    # Eliminar la columna objetivo y 'quality' si existe y es diferente del objetivo
+    columns_to_drop = [target_col]
+    if 'quality' in df.columns and 'quality' != target_col:
+        columns_to_drop.append('quality')
+    
+    X = df.drop(columns_to_drop, axis=1)
     
     # Escalar características
     scaler = StandardScaler()
