@@ -8,11 +8,15 @@ test:
 	python -m pytest tests/ -v
 
 lint:
-	black src/ tests/ --check
+	black src/ tests/ --check --diff || echo "⚠️  Some files need formatting"
 
 format:
 	black src/ tests/
 
 run-pipeline: install train
 
-.PHONY: install train test lint format run-pipeline
+# Nueva tarea para CI que no falle con formato
+ci-lint:
+	black src/ tests/ --check
+
+.PHONY: install train test lint format run-pipeline ci-lint

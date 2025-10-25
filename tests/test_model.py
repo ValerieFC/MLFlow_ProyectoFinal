@@ -5,18 +5,19 @@ import sys
 import os
 
 # Asegurar que podemos importar desde src
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 # Ahora podemos importar directamente
 from src.train import load_data, preprocess_data
+
 
 def test_data_loading():
     """Test para verificar la carga de datos"""
     try:
         # Esto probará la función load_data
-        df = load_data('data/winequality-red.csv')
+        df = load_data("data/winequality-red.csv")
         assert df.shape[1] >= 11  # Debe tener al menos 11 columnas
-        assert 'quality' in df.columns
+        assert "quality" in df.columns
         print("✅ Test de carga de datos pasado")
     except Exception as e:
         pytest.fail(f"Error en carga de datos: {e}")
