@@ -1,5 +1,5 @@
 data:
-  path: "data/winequality.csv"
+  path: "data/winequality-red.csv"
   test_size: 0.2
   random_state: 42
 

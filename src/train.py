@@ -15,9 +15,16 @@ def load_config():
     with open("config.yml", "r") as file:
         return yaml.safe_load(file)
     
+from pathlib import Path
+
 def load_data(file_path):
-    """Cargar y limpiar datos"""
-    df = pd.read_csv(file_path, delimiter=';')
+    """Cargar datos desde CSV"""
+    # Obtener el directorio raíz del proyecto (un nivel arriba de src/)
+    project_root = Path(__file__).parent.parent
+    full_path = project_root / file_path
+    
+    df = pd.read_csv(full_path, delimiter=';')
+    return df
     
     # Limpieza básica
     print(f"Datos originales: {df.shape}")
