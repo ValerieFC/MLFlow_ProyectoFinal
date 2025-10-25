@@ -4,6 +4,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score, f1_score, classification_report
+from pathlib import Path
 import mlflow
 import mlflow.sklearn
 import yaml
@@ -14,8 +15,6 @@ def load_config():
     """Cargar configuración desde archivo YAML"""
     with open("config.yml", "r") as file:
         return yaml.safe_load(file)
-    
-from pathlib import Path
 
 def load_data(file_path):
     """Cargar datos desde CSV"""
@@ -24,7 +23,6 @@ def load_data(file_path):
     full_path = project_root / file_path
     
     df = pd.read_csv(full_path, delimiter=';')
-    return df
     
     # Limpieza básica
     print(f"Datos originales: {df.shape}")
@@ -34,7 +32,6 @@ def load_data(file_path):
         df = df.dropna()
         print("Valores nulos eliminados")
     
-    # Codificación: la calidad ya está en formato numérico (3-9)
     # Crear variable binaria para clasificación (calidad buena/mala)
     df['quality_binary'] = (df['quality'] >= 7).astype(int)
     
@@ -86,13 +83,20 @@ def evaluate_model(model, X_test, y_test):
     return accuracy, f1, y_pred
 
 def main():
-    """Pipeline principal de ML"""
+    """Función principal"""
+    # Configurar rutas
+    project_root = Path(__file__).parent.parent
+    mlruns_path = project_root / "mlruns"
+    mlruns_path.mkdir(exist_ok=True)
+    
+    # Configurar MLflow para usar la raíz del proyecto
+    mlflow.set_tracking_uri(f"file://{mlruns_path.absolute()}")
+    
+    # Configurar experimento
+    mlflow.set_experiment("wine_quality")
+    
     # Cargar configuración
     config = load_config()
-    
-    # Configurar MLflow
-    mlflow.set_tracking_uri(config['mlflow']['tracking_uri'])
-    mlflow.set_experiment(config['mlflow']['experiment_name'])
     
     # Cargar datos
     df = load_data(config['data']['path'])
